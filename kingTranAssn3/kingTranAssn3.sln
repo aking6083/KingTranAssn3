@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kingTranAssn3", "kingTranAssn3.vcxproj", "{63957C7C-2F24-490C-83D7-FF850477F829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63957C7C-2F24-490C-83D7-FF850477F829}.Debug|Win32.ActiveCfg = Debug|Win32
+		{63957C7C-2F24-490C-83D7-FF850477F829}.Debug|Win32.Build.0 = Debug|Win32
+		{63957C7C-2F24-490C-83D7-FF850477F829}.Release|Win32.ActiveCfg = Release|Win32
+		{63957C7C-2F24-490C-83D7-FF850477F829}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
