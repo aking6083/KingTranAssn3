@@ -12,7 +12,7 @@ int *initOpenTable(int tableSize); // Done
 int *makeOpenTable(int randomNums[]);
 int getHash(int numToHash);
 int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest);
-int findNextEmpty(int openTable[]);
+int findNextEmpty(int *openTable[], int hashedAddy, testType theTest);
 int reHash(int oldAddy);
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 				double &avg, double &kAvg);
