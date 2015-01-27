@@ -1,9 +1,3 @@
-struct chainNode {
-	int nodeData;
-	chainNode *next;
-};
-
-const enum testType { PROBE, DBL_HASH, CHAIN };
 int * createList(); //Done
 bool isDupe(int randomNums[], int theNum); //Done
 int getTableSize(); //Done

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "kingFunctions.h"
+#include "Tran-assn3-funcs.h"
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>

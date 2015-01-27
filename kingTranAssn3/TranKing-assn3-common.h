@@ -9,17 +9,11 @@
 enum testType = {PROBE, DBL_HASH, CHAIN			// test type definitions
 };
 
-const int MAX_LIST_SIZE = 5000;					// max hash table size
+const int LIST_SIZE = 5000,				     // random number array size
+          MIN_TBL_SZ = 6700;                      // minimum hash table size
 
-// global hash table arrays and linked list structure
-int openTable[];			// open addressing hash table
-
-struct node {				// separate chaining hash table node
-	int num;
-	node *next;
-};
-
-struct sepChain {			// separate chaining hash table
-	int num;
-	node *top;
+// global hash table structure
+struct chainNode {                                // separate chain hash table
+     int nodeData;
+     chainNode *next;
 };
