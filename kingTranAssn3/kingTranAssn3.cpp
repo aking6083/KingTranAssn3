@@ -25,18 +25,9 @@ int main(int argc, char* argv[])
 	chainTbl = initSeperateChain(tableSize);
 
 	//Show first one
-
-	chainTbl[200].nodeData = 300;
-
-
-	//Slide it down
-	testNode = new chainNode;
-	testNode->nodeData = 301;
-	testNode->next = NULL;
-	chainTbl[200].next = testNode;
-
-	cout << chainTbl[200].nodeData << endl;
-	cout << chainTbl[200].next->nodeData << endl;
-
+	
+	int tstNum = hashIt(301, tableSize);
+	
+	cout << tstNum;
 	return 0;
 }

@@ -62,7 +62,8 @@ int getTableSize()
 
 chainNode* initSeperateChain(int tableSize)
 {
-	chainNode* tempTable[MIN_TBL_SZ];
+	chainNode** tempTable = new chainNode*[tableSize];
+
 	chainNode* tempNode = NULL;
 
 	for (int a = 0; a <= tableSize - 1; a++)
@@ -104,4 +105,20 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 	}
 	return *chainTable;
 
+}
+
+chainNode * insertToChain(int sepChain[], int tblData)
+{
+	chainNode *tempNode;
+	tempNode = new (nothrow)chainNode;
+	
+	return tempNode;
+	
+}
+
+int hashIt(int numToHash, int tblSz)
+{
+	int returnVal = 0;
+	returnVal = numToHash%tblSz;
+	return returnVal;
 }
