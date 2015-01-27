@@ -99,6 +99,7 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 		if (tempNode)
 		{
 			// Need to call insert to open which will call hash, or re-has depending on if there is a collision
+			insertToChain(sepChain, randomNums[a], tableSize);
 		}
 		else
 			cout << "\nMemory Allocation Error\n";
@@ -107,12 +108,15 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 
 }
 
-chainNode * insertToChain(int sepChain[], int tblData)
+chainNode * insertToChain(chainNode* sepChain[], int tblData, int tblSize)
 {
 	chainNode *tempNode;
+	int address = 0;
 	tempNode = new (nothrow)chainNode;
-	
-	return tempNode;
+	tempNode->nodeData = tblData;
+	address = hashIt(tblData,tblSize);
+	sepChain[address] = tempNode;
+	return *sepChain;
 	
 }
 
