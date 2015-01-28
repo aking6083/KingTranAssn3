@@ -91,16 +91,20 @@ int *makeOpenTable(int randomNums[])
 //  FUNCTION:  getHash
 //  DESCRIP:   Gets hash address for key value
 //  INPUT:     Parameters: numToHash - key value to hash
+//						   tableSize - size of hash table
 //  OUTPUT:    Parameters: None
 //			   Return Value: hashedAddy - hash address
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int getHash(int numToHash)
+int getHash(int numToHash, int tableSize)
 {
 	int hashedAddy;
 
-	hashedAddy = numToHash % LIST_SIZE;
+	hashedAddy = numToHash % tableSize;
+
+	while (hashedAddy >= tableSize)
+		hashedAddy %= tableSize;
 
 	return hashedAddy;
 }
@@ -130,28 +134,15 @@ int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int findNextEmpty(int *openTable[], int hashedAddy, testType theTest)
+int findNextEmpty(int *openTable[])
 {
 	int nextAddy;
 
-	switch (theTest)
-	{
-		case PROBE:
-			nextAddy = hashedAddy;
-
-			while (openTable[nextAddy] != 0)
-			{
-				if (nextAddy == (LIST_SIZE - 1))
-					nextAddy = 0;
-				else
-					nextAddy++;
-			}
-
-			break;
-		case DBL_HASH:
-			// code
-			break;
-	}
+	while (openTable[nextAddy] != 0)
+		if (nextAddy == (LIST_SIZE - 1))
+			nextAddy = 0;
+		else
+			nextAddy++;
 
 	return nextAddy;
 }
@@ -160,14 +151,25 @@ int findNextEmpty(int *openTable[], int hashedAddy, testType theTest)
 //  FUNCTION:  reHash
 //  DESCRIP:   Implements double hashing test.
 //  INPUT:     Parameters: oldAddy - old hash address
+//						   theNum - key for primary hash
+//						   tableSize - size of hash table
 //  OUTPUT:    Parameters: None
 //			   Return Value: newAddy - new hash address if collision occurs
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int reHash(int oldAddy)
+int reHash(int oldAddy, int theNum, int tableSize)
 {
-	
+	int primHash,
+		newAddy;
+
+	primHash = (theNum % (tableSize - 2)) + 1;
+	newAddy = oldAddy + primHash;
+
+	while (openTable[newAddy] != 0)
+		newAddy += primHash;
+
+	return newAddy;
 }
 
 //**************************************************************************

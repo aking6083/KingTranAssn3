@@ -6,14 +6,13 @@
 //**************************************************************************
 
 // global constants
-enum testType = {PROBE, DBL_HASH, CHAIN			// test type definitions
-};
+enum testType { PROBE, DBL_HASH, CHAIN };		// test type definitions
 
-const int LIST_SIZE = 5000,				     // random number array size
-          MIN_TBL_SZ = 6700;                      // minimum hash table size
+const int LIST_SIZE = 5000,						// random number array size
+          MIN_TBL_SZ = 6700;					// minimum hash table size
 
 // global hash table structure
-struct chainNode {                                // separate chain hash table
+struct chainNode {								// separate chain hash table
      int nodeData;
      chainNode *next;
 };

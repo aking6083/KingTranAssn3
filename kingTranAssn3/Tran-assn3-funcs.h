@@ -10,10 +10,10 @@ bool isDup(int randomNums[], int theNum);    // Done
 // open addressing table prototypes
 int *initOpenTable(int tableSize); // Done
 int *makeOpenTable(int randomNums[]);
-int getHash(int numToHash);
+int getHash(int numToHash, int tableSize);	// Done
 int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest);
-int findNextEmpty(int *openTable[], int hashedAddy, testType theTest);
-int reHash(int oldAddy);
+int findNextEmpty(int *openTable[]);	// Done
+int reHash(int oldAddy, int theNum, int tableSize);	// Done
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 				double &avg, double &kAvg);
 					
