@@ -5,7 +5,9 @@
 //***************************************************************************
 
 // prototypes
-bool isDup(int randomNums[], int theNum);    // Done
+//enum testType { PROBE, DBL_HASH, CHAIN };
+
+bool isDupe(int randomNums[], int theNum);    // Done
 
 // open addressing table prototypes
 int *initOpenTable(int tableSize); // Done

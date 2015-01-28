@@ -1,14 +1,12 @@
 #include "stdafx.h"
+#include "TranKing-assn3-common.h"
+#include "Tran-assn3-funcs.h"
+#include "kingFunctions.h"
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
-#include "TranKing-assn3-common.h"
-#include "kingFunctions.h"
-#include "Tran-assn3-funcs.h"
 
 using namespace std;
-
-
 
 int * createList()
 {
@@ -45,36 +43,24 @@ int getTableSize()
 	return userInput;
 }
 
-chainNode* initSeperateChain(int tableSize)
+void initSeperateChain(int tableSize, chainNode *chainTbl[])
 {
-	chainNode** tempTable = new chainNode*[tableSize];
+	
+	chainNode *tempNode = NULL;
 
-	chainNode* tempNode = NULL;
-
+	
 	for (int a = 0; a <= tableSize - 1; a++)
 	{
-		tempNode = new (nothrow)chainNode;
-
-		if (tempNode)
-		{
-			tempTable[a] = tempNode;
-			tempTable[a]->nodeData = 0;
-			tempTable[a]->next = NULL;
-		}
-		else
-			cout << "\nMemory Allocation Error\n";
+		chainTbl[a]->nodeData = 0;
+		chainTbl[a]->next = NULL;
 	}
-
-
-
-	return *tempTable;
-
 
 }
 
-chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
+chainNode* makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize)
 {
-	chainNode* chainTable[MIN_TBL_SZ];
+	
+	chainNode** chainTable;
 	chainNode* tempNode;
 
 	for (int a = 0; a <= 5000 - 1; a++)
@@ -84,23 +70,24 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 		if (tempNode)
 		{
 			// Need to call insert to open which will call hash, or re-has depending on if there is a collision
-			insertToChain(sepChain, randomNums[a], tableSize);
+			insertToChain(chainTable, randomNums[a], tableSize);
 		}
 		else
 			cout << "\nMemory Allocation Error\n";
 	}
-	return *chainTable;
+	return chainTable;
 
 }
 
-chainNode * insertToChain(chainNode* sepChain[], int tblData, int tblSize)
+chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize)
 {
 	chainNode *tempNode;
 	int address = 0;
 	tempNode = new (nothrow)chainNode;
 	tempNode->nodeData = tblData;
 	address = hashIt(tblData,tblSize);
-	sepChain[address] = tempNode;
+	
+    sepChain[address] = tempNode;
 	return *sepChain;
 	
 }

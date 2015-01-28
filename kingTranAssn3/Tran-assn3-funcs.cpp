@@ -20,6 +20,8 @@
 
 using namespace std;  
 
+//enum testType { PROBE, DBL_HASH, CHAIN };
+
 //**************************************************************************
 //  FUNCTION:  isDup
 //  DESCRIP:   Checks for duplicate numbers in random number array
@@ -30,7 +32,7 @@ using namespace std;
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool isDup(int randomNums[], int theNum)
+bool isDupe(int randomNums[], int theNum)
 {
      bool dupe = false;
      int a = 0;
@@ -84,7 +86,7 @@ int *initOpenTable(int tableSize)
 //**************************************************************************
 int *makeOpenTable(int randomNums[])
 {
-	
+	return NULL; //Added a return statement.
 }
 
 //**************************************************************************
@@ -122,7 +124,7 @@ int getHash(int numToHash, int tableSize)
 //**************************************************************************
 int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 {
-	
+	return NULL;
 }
 
 //**************************************************************************
@@ -136,7 +138,7 @@ int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 //**************************************************************************
 int findNextEmpty(int *openTable[])
 {
-	int nextAddy;
+	int nextAddy = -90;
 
 	while (openTable[nextAddy] != 0)
 		if (nextAddy == (LIST_SIZE - 1))
@@ -165,8 +167,9 @@ int reHash(int oldAddy, int theNum, int tableSize)
 
 	primHash = (theNum % (tableSize - 2)) + 1;
 	newAddy = oldAddy + primHash;
+	int openTable[299];
 
-	while (openTable[newAddy] != 0)
+	while (openTable[newAddy] != 0) //Where is openTable coming from?? AK
 		newAddy += primHash;
 
 	return newAddy;
@@ -188,7 +191,7 @@ int reHash(int oldAddy, int theNum, int tableSize)
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 					double &avg, double &kAvg)
 {
-	
+	return NULL;
 }
 
 //**************************************************************************
