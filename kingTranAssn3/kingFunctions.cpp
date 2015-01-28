@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
-#include "commonStuff.h"
+#include "TranKing-assn3-common.h"
 #include "kingFunctions.h"
+#include "Tran-assn3-funcs.h"
 
 using namespace std;
 
@@ -29,22 +30,6 @@ int * createList()
 	}
 
 	return randomNums;
-}
-
-bool isDupe(int randomNums[], int theNum)
-{
-	bool dupe = false;
-	int a = 0;
-
-	while (!dupe && a <= 5000)
-	{
-		if (theNum == randomNums[a])
-			dupe = true;
-
-		a++;
-	}
-
-	return dupe;
 }
 
 int getTableSize()
