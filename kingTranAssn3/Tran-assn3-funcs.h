@@ -5,8 +5,6 @@
 //***************************************************************************
 
 // prototypes
-//enum testType { PROBE, DBL_HASH, CHAIN };
-
 bool isDupe(int randomNums[], int theNum);    // Done
 
 // open addressing table prototypes
@@ -15,7 +13,7 @@ int *makeOpenTable(int randomNums[]);
 int getHash(int numToHash, int tableSize);	// Done
 int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest);
 int findNextEmpty(int *openTable[]);	// Done
-int reHash(int oldAddy, int theNum, int tableSize);	// Done
+int reHash(int oldAddy, int theNum, int tableSize, int openTable[]);	// Done
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 				double &avg, double &kAvg);
 					

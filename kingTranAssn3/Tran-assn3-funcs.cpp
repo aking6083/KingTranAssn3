@@ -20,8 +20,6 @@
 
 using namespace std;  
 
-//enum testType { PROBE, DBL_HASH, CHAIN };
-
 //**************************************************************************
 //  FUNCTION:  isDup
 //  DESCRIP:   Checks for duplicate numbers in random number array
@@ -138,7 +136,7 @@ int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 //**************************************************************************
 int findNextEmpty(int *openTable[])
 {
-	int nextAddy = -90;
+	int nextAddy;
 
 	while (openTable[nextAddy] != 0)
 		if (nextAddy == (LIST_SIZE - 1))
@@ -160,16 +158,15 @@ int findNextEmpty(int *openTable[])
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int reHash(int oldAddy, int theNum, int tableSize)
+int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 {
 	int primHash,
 		newAddy;
 
 	primHash = (theNum % (tableSize - 2)) + 1;
 	newAddy = oldAddy + primHash;
-	int openTable[299];
 
-	while (openTable[newAddy] != 0) //Where is openTable coming from?? AK
+	while (openTable[newAddy] != 0) //Where is openTable coming from?? AK ---> oops forgot to put it in the parameter list; fixed. CT
 		newAddy += primHash;
 
 	return newAddy;
