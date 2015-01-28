@@ -9,11 +9,13 @@
 const enum testType { PROBE, DBL_HASH, CHAIN };		// test type definitions
 
 const int LIST_SIZE = 5000,						// random number array size
-          MIN_TBL_SZ = 6700;					// minimum hash table size
+          MIN_TBL_SZ = 6700,					// minimum hash table size
+		  MIN_RAND_RANGE = 1,					// minimum range for random number generator
+		  MAX_RAND_RANGE = 30000;				// maximum range for random number generator
 
 // global hash table structure
 
-struct chainNode {								// separate chain hash table
-	int nodeData;
+struct chainNode {								// chain node
+	int key;
 	chainNode *next;
 };
