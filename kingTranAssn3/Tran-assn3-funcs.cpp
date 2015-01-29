@@ -21,7 +21,7 @@
 using namespace std;  
 
 //**************************************************************************
-//  FUNCTION:  isDup
+//  FUNCTION:  isDupe
 //  DESCRIP:   Checks for duplicate numbers in random number array
 //  INPUT:     Parameters: randomNums - random number array
 //			               theNum - number to check
