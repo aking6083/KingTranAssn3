@@ -33,19 +33,19 @@ int *createList(int &last) // I edited the for loop a bit to ensure that it cont
 int getTableSize()
 {
 	int userInput;
-	// I commented the do/while loop out and the size restriction so I could test the program. CT
-//	do
-//	{
+
+	do
+	{
 		cout << "Enter table size (min of " << MIN_TBL_SZ << "): ";
 		cin >> userInput;
-	//	if (userInput < MIN_TBL_SZ)
-	//		cout << "Table must be larger than " << MIN_TBL_SZ << ".\n";
-//	} while (userInput < MIN_TBL_SZ);
+		if (userInput < MIN_TBL_SZ)
+			cout << "Table must be larger than " << MIN_TBL_SZ << ".\n";
+	} while (userInput < MIN_TBL_SZ);
 
 	return userInput;
 }
 
-void initSeperateChain(int tableSize) // is this the function you had trouble with? initialziing chainTbl[]? CT
+void initSeperateChain(int tableSize)
 {
 	chainNode** sepChain = NULL;
 

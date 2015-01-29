@@ -9,10 +9,10 @@ bool isDupe(int randomNums[], int theNum, int last);    // Done
 
 // open addressing table prototypes
 int *initOpenTable(int tableSize); // Done
-int *makeOpenTable(int randomNums[]);
+void makeOpenTable(int randomNums[], int openTable[], int tableSize, testType theTest);	// Done
 int getHash(int numToHash, int tableSize);	// Done
-int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest);
-int findNextEmpty(int *openTable[]);	// Done
+void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, testType theTest);	// Done
+int findNextEmpty(int openTable[], int hashedAddy);	// Done
 int reHash(int oldAddy, int theNum, int tableSize, int openTable[]);	// Done
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 				double &avg, double &kAvg);
