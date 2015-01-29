@@ -22,19 +22,17 @@ int main(int argc, char* argv[])
 	int *randomNums;
 	int tableSize = getTableSize();
 	
-	chainNode** chainTbl;
-	chainTbl = new chainNode*[6700];
-	for (int a = 0; a < tableSize; a++)
-		chainTbl[a] = NULL;
-
+	chainNode** chainTbl = NULL;
+	
 	//Random numbers created
 	randomNums = createList();
 	//Get table size
 	
-	//initSeperateChain(tableSize, chainTbl);
-	*chainTbl = makeSeperateChain(*chainTbl, randomNums, tableSize);
+	chainTbl = initSeperateChain(tableSize, chainTbl);
+	
+	makeSeperateChain(chainTbl, randomNums, tableSize);
 	//Show first one
-	//cout << chainTbl[2].nodeData << endl;
+	cout << chainTbl[2]->nodeData << endl;
 	
 	return 0;
 }
