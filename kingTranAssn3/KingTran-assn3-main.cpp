@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	//Get table size
 	
 	//initSeperateChain(tableSize, chainTbl);
-	*chainTbl = makeSeperateChain(chainTbl, randomNums, tableSize);
+	*chainTbl = makeSeperateChain(*chainTbl, randomNums, tableSize);
 	//Show first one
 	//cout << chainTbl[2].nodeData << endl;
 	
