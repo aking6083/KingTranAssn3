@@ -8,23 +8,23 @@
 
 using namespace std;
 
-int * createList()
+int *createList(int &last) // I edited the for loop a bit to ensure that it continues to generate a new number when isDupe() is true. CT
 {
-	static int randomNums[5000] = { 0 };
-	int insertNum = 0;
-	srand(time(NULL));
+	static int randomNums[LIST_SIZE] = { 0 };	// Changed hardcoded values to constants....does randomNums[] need to be static? CT
+	int insertNum;
 
-	for (int a = 0; a <= 5000; a++)
+	srand((unsigned int) time(NULL));	// added (unsigned int) to cast it as such to suppress the annoying warning when compiling. CT
+	last = 0;
+
+	for (int a = 0; a < LIST_SIZE; a++)
 	{
-		insertNum = rand() % 30000;
-
-		if (!isDupe(randomNums, insertNum))
-			randomNums[a] = insertNum;
-		else
+		do
 		{
-			insertNum = rand() % 30000;
-			randomNums[a] = insertNum;
-		}
+			insertNum = rand() % MAX_RAND_RANGE + 1;	// Changed hardcoded values to constants.  Added the "+ 1" at the end so the min random number generated is 1. CT
+		} while (isDupe(randomNums, insertNum, last));	// while loop keeps it looping while number is a duplicate until it generates a unique number. CT
+			
+		randomNums[a] = insertNum;	// After loop terminates, then it inserts number into array. CT
+		last = a;	// This is for the sentinel search. CT
 	}
 
 	return randomNums;
@@ -33,60 +33,90 @@ int * createList()
 int getTableSize()
 {
 	int userInput;
+
 	do
 	{
-		cout << "Enter table size (min of " << MIN_TBL_SZ << "):";
+		cout << "Enter table size (min of " << MIN_TBL_SZ << "): ";
 		cin >> userInput;
 		if (userInput < MIN_TBL_SZ)
-			cout << "Table must be larger than " << MIN_TBL_SZ << endl;
+			cout << "Table must be larger than " << MIN_TBL_SZ << ".\n";
 	} while (userInput < MIN_TBL_SZ);
+
 	return userInput;
 }
 
-chainNode** initSeperateChain(int tableSize, chainNode* chainTbl[])
+void initSeperateChain(int tableSize)
 {
-	
 	chainNode** sepChain = NULL;
-	
-	sepChain = new (nothrow)chainNode*[tableSize];
-	
+
+	// allocates chain with tableSize
+	sepChain = new (nothrow) chainNode*[tableSize];
+
+	// checks if chain was allocated
 	if (sepChain == NULL)
 		cout << "\nMemory allocation error.\n";
 	else
+		// initialize all elements in chain to NULL
+		for (int i = 0; i <= (tableSize - 1); i++)
+			sepChain[i] = NULL;
+
+
+
+
+
+	// Begin of test data. CT
+	int x = 0;
+	chainNode* node = NULL;
+
+	node = new (nothrow) chainNode;
+	if (node == NULL)
+		cout << "node allocation error.\n";
+	else
 	{
-		for (int a = 0; a <= tableSize - 1; a++)
-			sepChain[a] = NULL;
 		
-		
+
+		node->key = 78753;
+		node->next = NULL;
+
+		sepChain[x] = node;
 	}
-	return sepChain;
+
+	cout << "sep chain first node: " << sepChain[x]->key;
+	// End of test data. CT
+}
+/*
+chainNode* makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize)
+{
+	
+	chainNode* chainTable;
+	chainNode* tempNode;
+
+	for (int a = 0; a <= LIST_SIZE - 1; a++)
+	{
+		tempNode = new (nothrow)chainNode;
+
+		if (tempNode)
+		{
+			// Need to call insert to open which will call hash, or re-has depending on if there is a collision
+			insertToChain(chainTable, randomNums[a], tableSize);
+		}
+		else
+			cout << "\nMemory Allocation Error\n";
+	}
+	return chainTable;
+
 }
 
-void makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
-{
-
-	for (int a = 0; a <= 5000-1; a++)
-	{
-		
-		
-	insertToChain(sepChain, randomNums[a], tableSize);
-		
-	}
-	
-
-}	
-
-void insertToChain(chainNode* sepChain[], int tblData, int tblSize)
+chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize)
 {
 	chainNode *tempNode;
 	int address = 0;
 	tempNode = new (nothrow)chainNode;
 	tempNode->nodeData = tblData;
-	tempNode->next = NULL;
 	address = hashIt(tblData,tblSize);
-	cout << "inserting " << tblData << " at address " << address << endl;
-	sepChain[address] = tempNode;
 	
+    sepChain[address] = tempNode;
+	return *sepChain;
 	
 }
 
@@ -96,3 +126,4 @@ int hashIt(int numToHash, int tblSz)
 	returnVal = numToHash%tblSz;
 	return returnVal;
 }
+*/

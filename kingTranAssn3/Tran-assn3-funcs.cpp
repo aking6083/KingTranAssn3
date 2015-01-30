@@ -1,7 +1,7 @@
 //***************************************************************************
 // PROGRAM FILENAME: Tran-assn3-funcs.cpp
 // DESIGNER:	Christopher Tran
-// FUNCTIONS:	isDup - will check for unique values to store in array
+// FUNCTIONS:	isDupe - will check for unique values to store in array
 //				initOpenTable - create the open table and initializes values
 //				makeOpenTable - loads random integers into open table
 //				getHash - gets the hash address for the number
@@ -18,10 +18,10 @@
 #include "Tran-assn3-funcs.h"			    //For Tran function prototypes
 #include "kingFunctions.h"                  //For King function prototypes
 
-using namespace std;
+using namespace std;  
 
 //**************************************************************************
-//  FUNCTION:  isDup
+//  FUNCTION:  isDupe
 //  DESCRIP:   Checks for duplicate numbers in random number array
 //  INPUT:     Parameters: randomNums - random number array
 //			               theNum - number to check
@@ -33,7 +33,7 @@ using namespace std;
 bool isDupe(int randomNums[], int theNum, int last)
 {
 	bool dupe = false,
-		sentinelReached = false;
+		 sentinelReached = false;
 	int currIdx = 0;
 
 	randomNums[last + 1] = theNum;	// Places sentinel at the index after the last placed random number. CT
@@ -41,16 +41,21 @@ bool isDupe(int randomNums[], int theNum, int last)
 	// Sequential search with sentinel so it doesn't search whole array every time. CT
 	while (!dupe && !sentinelReached)
 	{
-		if (randomNums[currIdx] != theNum) // increments index if match for key not found. CT
+		// increments index if match for key not found. CT
+		if (randomNums[currIdx] != theNum)
 			currIdx++;
-		else if (currIdx <= last)	// if match for key is found and index is not greater than last number inserted into array. CT
+
+		// if match for key is found and index is not greater than last number inserted into array. CT
+		else if (currIdx <= last)
 			dupe = true;
+
+		// if match for key is found at sentinel (not duplicate). CT
 		else if (currIdx > last)
 			sentinelReached = true;
 	}
 
 	randomNums[last + 1] = 0;
-
+	 
 	return dupe;
 }
 
@@ -65,20 +70,20 @@ bool isDupe(int randomNums[], int theNum, int last)
 //**************************************************************************
 int *initOpenTable(int tableSize)
 {
-	int *openTable = NULL;
+     int *openTable = NULL;
 
-	// allocate hash table
-	openTable = new (nothrow) int[tableSize];
+     // allocate hash table
+     openTable = new (nothrow) int[tableSize];
 
-	// checks if table was allocated
-	if (openTable == NULL)
-		cout << "\nMemory allocation error.\n";
-	else
-		// initialize all elements in array to 0
-		for (int i = 0; i < (tableSize - 1); i++)
-			openTable[i] = 0;
+     // checks if table was allocated
+     if (openTable == NULL)
+          cout << "\nMemory allocation error.\n";
+     else
+          // initialize all elements in array to 0
+          for (int i = 0; i < (tableSize); i++)
+               openTable[i] = 0;
 
-	return openTable;
+	 return openTable;
 }
 
 //**************************************************************************
@@ -90,9 +95,23 @@ int *initOpenTable(int tableSize)
 //			   insertToOpen
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int *makeOpenTable(int randomNums[])
+void makeOpenTable(int randomNums[], int openTable[], int tableSize, testType theTest)
 {
-	return NULL; //Added a return statement.
+	int hashedAddy,
+		theNum,
+		i;
+
+	// loops through random number array to hash each one
+	for (i = 0; i < LIST_SIZE; i++)
+	{
+		theNum = randomNums[i];
+
+		// hashes key value in random number array
+		hashedAddy = getHash(theNum, tableSize);
+
+		// inserts key value into open addressing table at the hashed address
+		insertToOpen(openTable, hashedAddy, theNum, tableSize, theTest);
+	}
 }
 
 //**************************************************************************
@@ -111,6 +130,7 @@ int getHash(int numToHash, int tableSize)
 
 	hashedAddy = numToHash % tableSize;
 
+	// while hashed address is greater than the table size
 	while (hashedAddy >= tableSize)
 		hashedAddy %= tableSize;
 
@@ -128,9 +148,28 @@ int getHash(int numToHash, int tableSize)
 //			   reHash
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
+void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, testType theTest)
 {
-	return NULL;
+	int newAddy;
+
+	// if hash address is already in use
+	if (openTable[hashedAddy] != 0)
+	{
+		// decides which collision error testing method to use
+		switch (theTest)
+		{
+			case PROBE:
+				newAddy = findNextEmpty(openTable, hashedAddy);
+				break;
+			case DBL_HASH:
+				newAddy = reHash(hashedAddy, theNum, tableSize, openTable);
+				break;
+		}
+
+		openTable[newAddy] = theNum;
+	}
+	else
+		openTable[hashedAddy] = theNum;
 }
 
 //**************************************************************************
@@ -142,14 +181,18 @@ int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int findNextEmpty(int *openTable[], int hashedAddy)
+int findNextEmpty(int openTable[], int hashedAddy)
 {
 	int nextAddy;
 
-	nextAddy = hashedAddy;
+	// targets address after hashed address
+	nextAddy = hashedAddy + 1;
 
+	// loops while targeted address is not empty
 	while (openTable[nextAddy] != 0)
-		if (nextAddy == (LIST_SIZE - 1))
+
+		// if targeted address is the last in hash table and not empty, loop to beginning
+		if ((nextAddy == (LIST_SIZE - 1)) && (openTable[nextAddy] != 0))
 			nextAddy = 0;
 		else
 			nextAddy++;
@@ -176,7 +219,8 @@ int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 	primHash = (theNum % (tableSize - 2)) + 1;
 	newAddy = oldAddy + primHash;
 
-	while (openTable[newAddy] != 0) //Where is openTable coming from?? AK ---> oops forgot to put it in the parameter list; fixed. CT
+	// loops while double-hashed address is not empty
+	while (openTable[newAddy] != 0)
 		newAddy += primHash;
 
 	return newAddy;
@@ -196,7 +240,7 @@ int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
-	double &avg, double &kAvg)
+					double &avg, double &kAvg)
 {
 	return NULL;
 }
@@ -213,5 +257,5 @@ bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 //**************************************************************************
 void showResults(double loadFactor, int tblSize, int numTouch)
 {
-
+	
 }
