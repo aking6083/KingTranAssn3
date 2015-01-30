@@ -245,9 +245,33 @@ int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool searchOpenTable(int someTable[], int randomNums[], testType theTest, double &avg, double &kAvg)
+bool searchOpenTable(int openTable[], int randomNums[], testType theTest, int numTouch, double &avg, double &kAvg, int tableSize)
 {
-	return NULL;
+	int hashedAddy,
+		newAddy,
+		theNum,
+		i;
+
+	theNum = randomNums[i];
+
+	hashedAddy = getHash(theNum, tableSize);
+
+	// if hash address is already in use
+	if (openTable[hashedAddy] != 0)
+	{
+		// decides which collision error testing method to use
+		switch (theTest)
+		{
+		case PROBE:
+			newAddy = findNextEmpty(openTable, hashedAddy);
+			break;
+		case DBL_HASH:
+			newAddy = reHash(hashedAddy, theNum, tableSize, openTable);
+			break;
+		}
+	}
+	else
+		return NULL;
 }
 
 //**************************************************************************
@@ -263,10 +287,14 @@ bool searchOpenTable(int someTable[], int randomNums[], testType theTest, double
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest)
+void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest)	// having trouble with this function...CT
 {
 	int numToSearch = LIST_SIZE / 2;
 
+	// I can't think of a way to display this correctly.  Since showResults() must be called 3 times to process each calculation (probe, double hash, chaining), these intro lines
+	// would also be printed 3 times.  The only options I can see to fix this is to make the intro lines part of case NONE, where NONE is a default enum testType variable.
+	// However, this seems like a workaround for the proper procedure.  Another option would be to place a switch or if/else structure in the calculations to save the avg and Kavg values
+	// for each test in separate variables.  That way, we may only have to call showResults() one time....what do you think? CT
 	cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
 		 << "Load Factor = " << showpoint << setprecision(3) << loadFactor;
 	cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
