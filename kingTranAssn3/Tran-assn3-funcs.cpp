@@ -30,32 +30,19 @@ using namespace std;
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool isDupe(int randomNums[], int theNum, int last)
+bool isDupe(int randomNums[], int theNum) //Had to revert back to other method so I could implement my chain ~ AK
 {
-	bool dupe = false,
-		 sentinelReached = false;
-	int currIdx = 0;
+	bool dupe = false;
+	int a = 0;
 
-	randomNums[last + 1] = theNum;	// Places sentinel at the index after the last placed random number. CT
-
-	// Sequential search with sentinel so it doesn't search whole array every time. CT
-	while (!dupe && !sentinelReached)
+	while (!dupe && a <= 5000)
 	{
-		// increments index if match for key not found. CT
-		if (randomNums[currIdx] != theNum)
-			currIdx++;
-
-		// if match for key is found and index is not greater than last number inserted into array. CT
-		else if (currIdx <= last)
+		if (theNum == randomNums[a])
 			dupe = true;
 
-		// if match for key is found at sentinel (not duplicate). CT
-		else if (currIdx > last)
-			sentinelReached = true;
+		a++;
 	}
 
-	randomNums[last + 1] = 0;
-	 
 	return dupe;
 }
 

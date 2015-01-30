@@ -5,7 +5,7 @@
 //***************************************************************************
 
 // prototypes
-bool isDupe(int randomNums[], int theNum, int last);    // Done
+bool isDupe(int randomNums[], int theNum);    // Done
 
 // open addressing table prototypes
 int *initOpenTable(int tableSize); // Done
