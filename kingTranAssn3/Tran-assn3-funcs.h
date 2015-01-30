@@ -14,8 +14,7 @@ int getHash(int numToHash, int tableSize);	// Done
 void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, testType theTest);	// Done
 int findNextEmpty(int openTable[], int hashedAddy);	// Done
 int reHash(int oldAddy, int theNum, int tableSize, int openTable[]);	// Done
-bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
-				double &avg, double &kAvg);
+bool searchOpenTable(int someTable[], int randomNums[], testType theTest, double &avg, double &kAvg);
 					
 // display prototypes
-void showResults(double loadFactor, int tblSize, int numTouch);
+void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest);	// Done
