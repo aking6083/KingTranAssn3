@@ -1,7 +1,7 @@
-int * createList(); //Done
+int * createList(int &last); //Done
 int getTableSize(); //Done
-void initSeperateChain(int tableSize, chainNode* chainTbl[]); //Done
-chainNode* makeSeperateChain(chainNode** sepChain[], int randomNums[], int tableSize);
+void initSeperateChain(int tableSize); //Done
+chainNode* makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize);
 chainNode * insertToChain(chainNode** sepChain[], int tblData, int tblSize);
 double calcKnuth(int tableSize, int elementCnt);
 void runTest(int randomNums[], int openTable[], chainNode* sepChain[], testType theTest);
