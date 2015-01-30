@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	//Get table size
 
 	//Works as advertised finally...  
-
+	//Collisions resovled 
 	chainTbl = initSeperateChain(tableSize);
 	*chainTbl = makeSeperateChain(chainTbl, randomNums, tableSize);
 

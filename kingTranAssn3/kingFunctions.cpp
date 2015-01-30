@@ -68,7 +68,6 @@ chainNode** initSeperateChain(int tableSize)
 chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
 {
 
-	chainNode* chainTable = NULL;
 	chainNode* tempNode;
 
 	int collisionCnt = 0;
@@ -86,25 +85,29 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 			cout << "\nMemory Allocation Error\n";
 	}
 	cout << collisionCnt;
-	return chainTable;
+	return *sepChain;
 
 }
 
 chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& collisionCnt)
 {
-	chainNode *tempNode;
-	int address = 0;
 	
-	tempNode = new (nothrow)chainNode;
-	tempNode->key = tblData;
-	address = hashIt(tblData, tblSize);
+	int address = hashIt(tblData, tblSize);
+	chainNode* nextNode = NULL;
+
 	if (sepChain[address]->key == 0)
-		sepChain[address] = tempNode;
+		sepChain[address]->key = tblData;
 	else if (sepChain[address]->key != 0)
 	{
+		//Slide it over.
+		nextNode = new (nothrow)chainNode;
+		nextNode->key = tblData;
+		nextNode->next = NULL;
+
+		sepChain[address]->next = nextNode;
+		
 		collisionCnt++;
-		//Do something witht the collisions. 
-		//cout << " collision at  " << address << " for key " << tblData << endl;
+		
 	}
 		return *sepChain;
 
