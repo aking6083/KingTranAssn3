@@ -14,27 +14,20 @@
 using namespace std;
 
 
-int main(int argc, char* argv[])
+int main()
 {
-	string tets;
-	chainNode *testNode = NULL;
-	
-	int *randomNums;
-	int tableSize = getTableSize();
-	
-	chainNode** chainTbl;
-	chainTbl = new chainNode*[6700];
-	for (int a = 0; a < tableSize; a++)
-		chainTbl[a] = NULL;
+	int *randomNums,
+		tableSize,
+		last;
 
 	//Random numbers created
-	randomNums = createList();
+	randomNums = createList(last);
+
 	//Get table size
-	
-	//initSeperateChain(tableSize, chainTbl);
-	*chainTbl = makeSeperateChain(*chainTbl, randomNums, tableSize);
-	//Show first one
-	//cout << chainTbl[2].nodeData << endl;
-	
+	tableSize = getTableSize();
+
+	// Testing this function. CT
+	initSeperateChain(tableSize);
+
 	return 0;
 }

@@ -18,7 +18,7 @@
 #include "Tran-assn3-funcs.h"			    //For Tran function prototypes
 #include "kingFunctions.h"                  //For King function prototypes
 
-using namespace std;  
+using namespace std;
 
 //**************************************************************************
 //  FUNCTION:  isDup
@@ -30,20 +30,28 @@ using namespace std;
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool isDupe(int randomNums[], int theNum)
+bool isDupe(int randomNums[], int theNum, int last)
 {
-     bool dupe = false;
-     int a = 0;
+	bool dupe = false,
+		sentinelReached = false;
+	int currIdx = 0;
 
-     while (!dupe && a <= 5000)
-     {
-          if (theNum == randomNums[a])
-               dupe = true;
+	randomNums[last + 1] = theNum;	// Places sentinel at the index after the last placed random number. CT
 
-          a++;
-     }
+	// Sequential search with sentinel so it doesn't search whole array every time. CT
+	while (!dupe && !sentinelReached)
+	{
+		if (randomNums[currIdx] != theNum) // increments index if match for key not found. CT
+			currIdx++;
+		else if (currIdx <= last)	// if match for key is found and index is not greater than last number inserted into array. CT
+			dupe = true;
+		else if (currIdx > last)
+			sentinelReached = true;
+	}
 
-     return dupe;
+	randomNums[last + 1] = 0;
+
+	return dupe;
 }
 
 //**************************************************************************
@@ -57,20 +65,20 @@ bool isDupe(int randomNums[], int theNum)
 //**************************************************************************
 int *initOpenTable(int tableSize)
 {
-     int *openTable = NULL;
+	int *openTable = NULL;
 
-     // allocate hash table
-     openTable = new (nothrow) int[tableSize];
+	// allocate hash table
+	openTable = new (nothrow) int[tableSize];
 
-     // checks if table was allocated
-     if (openTable == NULL)
-          cout << "\nMemory allocation error.\n";
-     else
-          // initialize all elements in array to 0
-          for (int i = 0; i < (tableSize - 1); i++)
-               openTable[i] = 0;
+	// checks if table was allocated
+	if (openTable == NULL)
+		cout << "\nMemory allocation error.\n";
+	else
+		// initialize all elements in array to 0
+		for (int i = 0; i < (tableSize - 1); i++)
+			openTable[i] = 0;
 
-	 return openTable;
+	return openTable;
 }
 
 //**************************************************************************
@@ -134,9 +142,11 @@ int *insertToOpen(int openTable[], int hashedAddy, int theNum, testType theTest)
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int findNextEmpty(int *openTable[])
+int findNextEmpty(int *openTable[], int hashedAddy)
 {
 	int nextAddy;
+
+	nextAddy = hashedAddy;
 
 	while (openTable[nextAddy] != 0)
 		if (nextAddy == (LIST_SIZE - 1))
@@ -186,7 +196,7 @@ int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
 bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
-					double &avg, double &kAvg)
+	double &avg, double &kAvg)
 {
 	return NULL;
 }
@@ -203,5 +213,5 @@ bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 //**************************************************************************
 void showResults(double loadFactor, int tblSize, int numTouch)
 {
-	
+
 }

@@ -8,23 +8,23 @@
 
 using namespace std;
 
-int * createList()
+int * createList(int &last)  //Ok I see what you did here.
 {
-	static int randomNums[5000] = { 0 };
+	static int randomNums[LIST_SIZE] = { 0 };
 	int insertNum = 0;
-	srand(time(NULL));
+	
+	srand((unsigned int)time(NULL));
+	last = 0;
 
-	for (int a = 0; a <= 5000; a++)
+	for (int a = 0; a <= LIST_SIZE; a++)
 	{
-		insertNum = rand() % 30000;
-
-		if (!isDupe(randomNums, insertNum))
-			randomNums[a] = insertNum;
-		else
+		do
 		{
-			insertNum = rand() % 30000;
-			randomNums[a] = insertNum;
-		}
+			insertNum = rand() % MAX_RAND_RANGE + 1;	 //I gotcha here too, a different way to implement sentinel search.
+		} while (isDupe(randomNums, insertNum, last));	
+
+		randomNums[a] = insertNum;	
+		last = a;	
 	}
 
 	return randomNums;
@@ -84,7 +84,7 @@ chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize)
 	chainNode *tempNode;
 	int address = 0;
 	tempNode = new (nothrow)chainNode;
-	tempNode->nodeData = tblData;
+	tempNode->key = tblData;
 	address = hashIt(tblData,tblSize);
 	
     sepChain[address] = tempNode;
