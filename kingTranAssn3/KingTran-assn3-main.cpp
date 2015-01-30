@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	
 	makeSeperateChain(chainTbl, randomNums, tableSize);
 	//Show first one
-	cout << chainTbl[2]->nodeData << endl;
+	cout << chainTbl[2]->key << endl;
 	
 	return 0;
 }
