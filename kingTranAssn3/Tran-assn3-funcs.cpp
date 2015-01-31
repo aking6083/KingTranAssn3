@@ -25,8 +25,8 @@ using namespace std;
 //  DESCRIP:   Checks for duplicate numbers in random number array
 //  INPUT:     Parameters: randomNums - random number array
 //			               theNum - number to check
-//  OUTPUT:    Parameters: None
-//			   Return Value: true or false - indicates if number is duplicate
+//  OUTPUT:    Parameters: last - indicates last placed number
+//			   Return Value: dupe - indicates if number is duplicate
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
@@ -62,7 +62,7 @@ bool isDupe(int randomNums[], int theNum, int last)
 //**************************************************************************
 //  FUNCTION:  initOpenTable
 //  DESCRIP:   Initializes open table and sets values to NULL or 0.
-//  INPUT:     Parameters: tblSize - size of table
+//  INPUT:     Parameters: tableSize - size of table
 //  OUTPUT:    Parameters: None
 //			   Return Value: openTable - returns initialized table
 //  CALLS TO:  None
@@ -90,6 +90,9 @@ int *initOpenTable(int tableSize)
 //  FUNCTION:  makeOpenTable
 //  DESCRIP:   Loads random integers into open table.
 //  INPUT:     Parameters: randomNums - random number array
+//						   openTable - open addressing hash table
+//						   tableSize - size of hash table
+//						   theTest - type of collision error test
 //  OUTPUT:    Parameters: None
 //  CALLS TO:  getHash
 //			   insertToOpen
@@ -142,6 +145,7 @@ int getHash(int numToHash, int tableSize)
 //  DESCRIP:   Inserts vale into the open table.
 //  INPUT:     Parameters: hashedAddy - hashed address
 //						   theNum - number to insert
+//						   tableSize - size of hash table
 //						   theTest - indicates which test to run
 //  OUTPUT:    Parameters: openTable - inserts number into open table
 //  CALLS TO:  findNextEmpty
@@ -176,6 +180,7 @@ void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, te
 //  FUNCTION:  findNextEmpty
 //  DESCRIP:   Implements linear probing test.
 //  INPUT:     Parameters: openTable - table to check
+//						   hashedAddy - original hash address
 //  OUTPUT:    Parameters: None
 //			   Return Value: nextAddy - next hash address if collision occurs
 //  CALLS TO:  None
@@ -206,6 +211,7 @@ int findNextEmpty(int openTable[], int hashedAddy)
 //  INPUT:     Parameters: oldAddy - old hash address
 //						   theNum - key for primary hash
 //						   tableSize - size of hash table
+//						   openTable - open addressing hash table
 //  OUTPUT:    Parameters: None
 //			   Return Value: newAddy - new hash address if collision occurs
 //  CALLS TO:  None
@@ -239,10 +245,33 @@ int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
-					double &avg, double &kAvg)
+bool searchOpenTable(int openTable[], int randomNums[], testType theTest, int numTouch, double &avg, double &kAvg, int tableSize)
 {
-	return NULL;
+	int hashedAddy,
+		newAddy,
+		theNum,
+		i;
+
+	theNum = randomNums[i];
+
+	hashedAddy = getHash(theNum, tableSize);
+
+	// if hash address is already in use
+	if (openTable[hashedAddy] != 0)
+	{
+		// decides which collision error testing method to use
+		switch (theTest)
+		{
+		case PROBE:
+			newAddy = findNextEmpty(openTable, hashedAddy);
+			break;
+		case DBL_HASH:
+			newAddy = reHash(hashedAddy, theNum, tableSize, openTable);
+			break;
+		}
+	}
+	else
+		return NULL;
 }
 
 //**************************************************************************
@@ -251,11 +280,41 @@ bool searchOpenTable(int someTable[], int randomNums[], testType theTest,
 //  INPUT:     Parameters: loadFactor - load factor used
 //						   tblSize - size of table
 //						   numTouch - numbers searched
+//						   avg - average items searched
+//						   kAvg - knuth predicted items searched
+//						   theTest - test type
 //  OUTPUT:    Parameters: None
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(double loadFactor, int tblSize, int numTouch)
+void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest)	// having trouble with this function...CT
 {
-	
+	int numToSearch = LIST_SIZE / 2;
+
+	// I can't think of a way to display this correctly.  Since showResults() must be called 3 times to process each calculation (probe, double hash, chaining), these intro lines
+	// would also be printed 3 times.  The only options I can see to fix this is to make the intro lines part of case NONE, where NONE is a default enum testType variable.
+	// However, this seems like a workaround for the proper procedure.  Another option would be to place a switch or if/else structure in the calculations to save the avg and Kavg values
+	// for each test in separate variables.  That way, we may only have to call showResults() one time....what do you think? CT
+	cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
+		 << "Load Factor = " << showpoint << setprecision(3) << loadFactor;
+	cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
+
+	switch (theTest)
+	{
+		case PROBE:
+			cout << setw(6) << "Linear Probing\n"
+				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			break;
+		case DBL_HASH:
+			cout << setw(6) << "Double Hashing\n"
+				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			break;
+		case CHAIN:
+			cout << setw(6) << "Chained Hashing\n"
+				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			break;
+	}
 }
