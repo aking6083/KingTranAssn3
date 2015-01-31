@@ -25,7 +25,8 @@ using namespace std;
 //  DESCRIP:   Checks for duplicate numbers in random number array
 //  INPUT:     Parameters: randomNums - random number array
 //			               theNum - number to check
-//  OUTPUT:    Parameters: last - indicates last placed number
+//						   last - indicates last placed number
+//  OUTPUT:    Parameters: None
 //			   Return Value: dupe - indicates if number is duplicate
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
@@ -68,22 +69,27 @@ bool isDupe(int randomNums[], int theNum, int last)
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int *initOpenTable(int tableSize)
+bool initOpenTable(int* &openTable, int tableSize)
 {
-     int *openTable = NULL;
+     openTable = NULL;
 
      // allocate hash table
      openTable = new (nothrow) int[tableSize];
 
      // checks if table was allocated
-     if (openTable == NULL)
-          cout << "\nMemory allocation error.\n";
-     else
-          // initialize all elements in array to 0
-          for (int i = 0; i < (tableSize); i++)
-               openTable[i] = 0;
-
-	 return openTable;
+	 if (openTable == NULL)
+	 {
+		 cout << "\nMemory allocation error.\n";
+		 return false;
+	 }
+	 else
+	 {
+		 // initialize all elements in array to 0
+		 for (int i = 0; i < (tableSize); i++)
+			 openTable[i] = 0;
+		 
+		 return true;
+	 }
 }
 
 //**************************************************************************
@@ -148,13 +154,14 @@ int getHash(int numToHash, int tableSize)
 //						   tableSize - size of hash table
 //						   theTest - indicates which test to run
 //  OUTPUT:    Parameters: openTable - inserts number into open table
-//  CALLS TO:  findNextEmpty
-//			   reHash
+//  CALLS TO:  linearProbe
+//			   doubleHash
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
 void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, testType theTest)
 {
-	int newAddy;
+	int newAddy,
+		count;
 
 	// if hash address is already in use
 	if (openTable[hashedAddy] != 0)
@@ -163,10 +170,10 @@ void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, te
 		switch (theTest)
 		{
 			case PROBE:
-				newAddy = findNextEmpty(openTable, hashedAddy);
+				newAddy = linearProbe(openTable, hashedAddy, count);
 				break;
 			case DBL_HASH:
-				newAddy = reHash(hashedAddy, theNum, tableSize, openTable);
+				newAddy = doubleHash(hashedAddy, theNum, tableSize, openTable, count);
 				break;
 		}
 
@@ -177,109 +184,121 @@ void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, te
 }
 
 //**************************************************************************
-//  FUNCTION:  findNextEmpty
+//  FUNCTION:  linearProbe
 //  DESCRIP:   Implements linear probing test.
 //  INPUT:     Parameters: openTable - table to check
 //						   hashedAddy - original hash address
-//  OUTPUT:    Parameters: None
+//  OUTPUT:    Parameters: count - counts addresses searched
 //			   Return Value: nextAddy - next hash address if collision occurs
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int findNextEmpty(int openTable[], int hashedAddy)
+int linearProbe(int openTable[], int hashedAddy, int &count)
 {
 	int nextAddy;
+
+	count = 1;
 
 	// targets address after hashed address
 	nextAddy = hashedAddy + 1;
 
 	// loops while targeted address is not empty
 	while (openTable[nextAddy] != 0)
-
+	{
 		// if targeted address is the last in hash table and not empty, loop to beginning
 		if ((nextAddy == (LIST_SIZE - 1)) && (openTable[nextAddy] != 0))
 			nextAddy = 0;
 		else
 			nextAddy++;
 
+		count++;
+	}
 	return nextAddy;
 }
 
 //**************************************************************************
-//  FUNCTION:  reHash
+//  FUNCTION:  doubleHash
 //  DESCRIP:   Implements double hashing test.
 //  INPUT:     Parameters: oldAddy - old hash address
 //						   theNum - key for primary hash
 //						   tableSize - size of hash table
 //						   openTable - open addressing hash table
-//  OUTPUT:    Parameters: None
+//  OUTPUT:    Parameters: count - counts addresses searched
 //			   Return Value: newAddy - new hash address if collision occurs
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-int reHash(int oldAddy, int theNum, int tableSize, int openTable[])
+int doubleHash(int oldAddy, int theNum, int tableSize, int openTable[], int &count)
 {
 	int primHash,
 		newAddy;
 
+	count = 1;
 	primHash = (theNum % (tableSize - 2)) + 1;
 	newAddy = oldAddy + primHash;
 
 	// loops while double-hashed address is not empty
 	while (openTable[newAddy] != 0)
+	{
 		newAddy += primHash;
-
+		count++;
+	}
+		
 	return newAddy;
 }
 
 //**************************************************************************
 //  FUNCTION:  searchOpenTable
 //  DESCRIP:   Searches chain table for numbers from random number array.
-//  INPUT:     Parameters: someTable - table to search
+//  INPUT:     Parameters: openTable - table to search
 //						   randomNums - random number array
 //						   theTest - type of test to run
-//						   avg - average elements searched
-//						   kAvg - knuth prediction
-//  OUTPUT:    Parameters: None
-//			   Return Value: true or false - if number found
-//  CALLS TO:  None
+//  OUTPUT:    Parameters: count - counts addresses searched
+//  CALLS TO:  getHash
+//			   linearProbe
+//			   doubleHash
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-bool searchOpenTable(int openTable[], int randomNums[], testType theTest, int numTouch, double &avg, double &kAvg, int tableSize)
+void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &count, int tableSize)
 {
 	int hashedAddy,
 		newAddy,
 		theNum,
 		i;
 
-	theNum = randomNums[i];
-
-	hashedAddy = getHash(theNum, tableSize);
-
-	// if hash address is already in use
-	if (openTable[hashedAddy] != 0)
+	// Loops through random number list, checking every even number index
+	for (i = 0; i < LIST_SIZE; i += 2)
 	{
-		// decides which collision error testing method to use
-		switch (theTest)
+		theNum = randomNums[i];
+		
+		// Get initial hash address
+		hashedAddy = getHash(theNum, tableSize);
+
+		// if hash address belongs to another number
+		if (openTable[hashedAddy] != theNum)
 		{
-		case PROBE:
-			newAddy = findNextEmpty(openTable, hashedAddy);
-			break;
-		case DBL_HASH:
-			newAddy = reHash(hashedAddy, theNum, tableSize, openTable);
-			break;
+			// decides which collision error testing method to use, resulting in new hash address to search
+			switch (theTest)
+			{
+				case PROBE:
+					newAddy = linearProbe(openTable, hashedAddy, count);
+					break;
+				case DBL_HASH:
+					newAddy = doubleHash(hashedAddy, theNum, tableSize, openTable, count);
+					break;
+			}
 		}
+		else
+			count = 1;
 	}
-	else
-		return NULL;
 }
 
 //**************************************************************************
 //  FUNCTION:  showResults
 //  DESCRIP:   Displays results of each calculation for each test.
 //  INPUT:     Parameters: loadFactor - load factor used
-//						   tblSize - size of table
-//						   numTouch - numbers searched
+//						   tablSize - size of table
+//						   count - numbers searched
 //						   avg - average items searched
 //						   kAvg - knuth predicted items searched
 //						   theTest - test type
@@ -287,34 +306,31 @@ bool searchOpenTable(int openTable[], int randomNums[], testType theTest, int nu
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest)	// having trouble with this function...CT
+void showResults(double loadFactor, int tableSize, int count, double avg, double kAvg, testType theTest)	// having trouble with this function...CT
 {
 	int numToSearch = LIST_SIZE / 2;
-
-	// I can't think of a way to display this correctly.  Since showResults() must be called 3 times to process each calculation (probe, double hash, chaining), these intro lines
-	// would also be printed 3 times.  The only options I can see to fix this is to make the intro lines part of case NONE, where NONE is a default enum testType variable.
-	// However, this seems like a workaround for the proper procedure.  Another option would be to place a switch or if/else structure in the calculations to save the avg and Kavg values
-	// for each test in separate variables.  That way, we may only have to call showResults() one time....what do you think? CT
-	cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
-		 << "Load Factor = " << showpoint << setprecision(3) << loadFactor;
-	cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
-
+	
 	switch (theTest)
 	{
 		case PROBE:
-			cout << setw(6) << "Linear Probing\n"
-				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			cout << setw(5) << " " << "Linear Probing\n"
+				 << setw(12) << count << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(10) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
 			break;
 		case DBL_HASH:
-			cout << setw(6) << "Double Hashing\n"
-				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			cout << setw(5) << " " << "Double Hashing\n"
+				 << setw(10) << count << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(12) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
 			break;
 		case CHAIN:
-			cout << setw(6) << "Chained Hashing\n"
-				 << setw(9) << numTouch << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(11) << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			cout << setw(5) << " " << "Chained Hashing\n"
+				 << setw(10) << count << " items examined (avg = " << avg << " items examined per search)\n"
+				 << setw(12) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+			break;
+		case NONE:
+			cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
+				 << "Load Factor = " << showpoint << setprecision(3) << loadFactor;
+			cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
 			break;
 	}
 }

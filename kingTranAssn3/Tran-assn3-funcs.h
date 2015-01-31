@@ -8,13 +8,13 @@
 bool isDupe(int randomNums[], int theNum, int last);    // Done
 
 // open addressing table prototypes
-int *initOpenTable(int tableSize); // Done
+bool initOpenTable(int* &openTable, int tableSize); // Done
 void makeOpenTable(int randomNums[], int openTable[], int tableSize, testType theTest);	// Done
 int getHash(int numToHash, int tableSize);	// Done
 void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, testType theTest);	// Done
-int findNextEmpty(int openTable[], int hashedAddy);	// Done
-int reHash(int oldAddy, int theNum, int tableSize, int openTable[]);	// Done
-bool searchOpenTable(int someTable[], int randomNums[], testType theTest, double &avg, double &kAvg);
+int linearProbe(int openTable[], int hashedAddy, int &count);	// Done
+int doubleHash(int oldAddy, int theNum, int tableSize, int openTable[], int &count);	// Done
+void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &count, int tableSize);	// Done
 					
 // display prototypes
-void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest);	// Done
+void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest);

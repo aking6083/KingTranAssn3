@@ -80,19 +80,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="kingFunctions.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="Tran-assn3-funcs.h" />
     <ClInclude Include="TranKing-assn3-common.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kingFunctions.cpp" />
     <ClCompile Include="KingTran-assn3-main.cpp" />
-    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tran-assn3-funcs.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
