@@ -1,45 +1,92 @@
-#include "stdafx.h"
 #include "TranKing-assn3-common.h"
 #include "kingFunctions.h"
 #include "Tran-assn3-funcs.h"
-
 #include <iostream>
 #include <iomanip>
-#include <stdio.h>
 #include <time.h>
-
-
-
 
 using namespace std;
 
-
 int main()
 {
-	testType probe = PROBE;
-
+	testType probe = PROBE,
+			 doubleHash = DBL_HASH,
+			 chain = CHAIN,
+			 none = NONE;
 	int *randomNums,
 		*openTable,
 		tableSize,
-		last;
+		last,
+		count;
+	double loadFactor,
+		   avg,
+		   kAvg;
+	bool allocated = false;
 
-	//Random numbers created
+
+
+	// test data
+	avg = 1.5;
+	kAvg = 2.5;
+	loadFactor = 0.5;
+	count = 0;
+	// end of test data
+
+
+
+	// Random numbers created
 	randomNums = createList(last);
 
-	//Get table size
+	// Get table size
 	tableSize = getTableSize();
 
+	// Initialize open addressing table for linear probe test
+	allocated = initOpenTable(openTable, tableSize);
 
-	// Testing these functions. CT
-	openTable = initOpenTable(tableSize);
-	makeOpenTable(randomNums, openTable, tableSize, probe);
-	
-	for (int i = 0; i < LIST_SIZE; i++)
-		cout << "RandomIndex[" << i << "]: " << randomNums[i] << endl;
-	
-	for (int x = 0; x < tableSize; x++)
-		cout << "OpenTable[" << x << "]: " << openTable[x] << endl;
-	// End of test. CT
+	if (allocated)
+	{
+		// Show information applicable to all tests
+		showResults(loadFactor, tableSize, count, avg, kAvg, none);
+
+		// Load open addressing table with random numbers
+		makeOpenTable(randomNums, openTable, tableSize, probe);
+
+		// Run search and calculations
+		// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+
+		// Shows results of search and calculations
+		showResults(loadFactor, tableSize, count, avg, kAvg, probe);
+
+		// Initialize open addressing table for double hash test
+		allocated = initOpenTable(openTable, tableSize);
+
+		if (allocated)
+		{
+			// Load open addressing table with random numbers
+			makeOpenTable(randomNums, openTable, tableSize, doubleHash);
+
+			// Run search and calculations
+			// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+
+			// Shows results of search and calculations
+			showResults(loadFactor, tableSize, count, avg, kAvg, doubleHash);
+
+			// Initialize separate chaining table for separate chain test
+			allocated = initSeperateChain(tableSize);
+
+			if (allocated)
+			{
+				// Load separate chaining table with random numbers
+				// ...call makeSeperateChain()
+
+				// Run search and calculations
+				// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+
+				// Shows results of search and calculations
+				showResults(loadFactor, tableSize, count, avg, kAvg, chain);
+			}
+		}
+	}
 
 	system("PAUSE");
 	return 0;

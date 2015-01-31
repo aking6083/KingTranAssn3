@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TranKing-assn3-common.h"
 #include "Tran-assn3-funcs.h"
 #include "kingFunctions.h"
@@ -45,7 +44,7 @@ int getTableSize()
 	return userInput;
 }
 
-void initSeperateChain(int tableSize)
+bool initSeperateChain(int tableSize)
 {
 	chainNode** sepChain = NULL;
 
@@ -54,35 +53,18 @@ void initSeperateChain(int tableSize)
 
 	// checks if chain was allocated
 	if (sepChain == NULL)
+	{
 		cout << "\nMemory allocation error.\n";
+		return false;
+	}
 	else
+	{
 		// initialize all elements in chain to NULL
 		for (int i = 0; i <= (tableSize - 1); i++)
 			sepChain[i] = NULL;
 
-
-
-
-
-	// Begin of test data. CT
-	int x = 0;
-	chainNode* node = NULL;
-
-	node = new (nothrow) chainNode;
-	if (node == NULL)
-		cout << "node allocation error.\n";
-	else
-	{
-		
-
-		node->key = 78753;
-		node->next = NULL;
-
-		sepChain[x] = node;
+		return true;
 	}
-
-	cout << "sep chain first node: " << sepChain[x]->key;
-	// End of test data. CT
 }
 /*
 chainNode* makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize)
