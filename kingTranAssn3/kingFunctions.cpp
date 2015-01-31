@@ -44,62 +44,82 @@ int getTableSize()
 	return userInput;
 }
 
-bool initSeperateChain(int tableSize)
-{
-	chainNode** sepChain = NULL;
-
-	// allocates chain with tableSize
-	sepChain = new (nothrow) chainNode*[tableSize];
-
-	// checks if chain was allocated
-	if (sepChain == NULL)
-	{
-		cout << "\nMemory allocation error.\n";
-		return false;
-	}
-	else
-	{
-		// initialize all elements in chain to NULL
-		for (int i = 0; i <= (tableSize - 1); i++)
-			sepChain[i] = NULL;
-
-		return true;
-	}
-}
 /*
-chainNode* makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize)
+	Please leave these functions alone, it doesnt work with chaining if you dont init ALL the table 
+	space with actual memory, because comparisons will fail.'
+*/
+
+chainNode** initSeperateChain(int tableSize, bool &allocated)
 {
+
+	chainNode *tempNode = NULL;
+	chainNode** chainTbl = new chainNode*[tableSize];
+
+	for (int a = 0; a <= tableSize - 1; a++)
+	{
+		//Have to make memory for each space, simply assigning NULL will
+		//cause a crash when it is accessed for comaprison later on down the road.
+		//We can check and exit for lack of memory here
+		tempNode = new (nothrow)chainNode;
+		if (tempNode)
+		{
+			tempNode->key = 0;
+			tempNode->next = NULL;
+			chainTbl[a] = tempNode;
+		}
 	
-	chainNode* chainTable;
+	}
+
+	return chainTbl;
+
+}
+
+chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
+{
+
 	chainNode* tempNode;
 
-	for (int a = 0; a <= LIST_SIZE - 1; a++)
+	int collisionCnt = 0;
+
+	for (int a = 0; a <= 5000 - 1; a++)
 	{
 		tempNode = new (nothrow)chainNode;
 
 		if (tempNode)
 		{
 			// Need to call insert to open which will call hash, or re-has depending on if there is a collision
-			insertToChain(chainTable, randomNums[a], tableSize);
+			insertToChain(sepChain, randomNums[a], tableSize, collisionCnt);
 		}
 		else
 			cout << "\nMemory Allocation Error\n";
 	}
-	return chainTable;
+	cout << collisionCnt;
+	return *sepChain;
 
 }
 
-chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize)
+chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& collisionCnt)
 {
-	chainNode *tempNode;
-	int address = 0;
-	tempNode = new (nothrow)chainNode;
-	tempNode->nodeData = tblData;
-	address = hashIt(tblData,tblSize);
-	
-    sepChain[address] = tempNode;
+
+	int address = hashIt(tblData, tblSize);
+	chainNode* nextNode = NULL;
+
+	if (sepChain[address]->key == 0)
+		sepChain[address]->key = tblData;
+	else if (sepChain[address]->key != 0)
+	{
+		//Slide it over.
+		nextNode = new (nothrow)chainNode;
+		nextNode->key = tblData;
+		nextNode->next = NULL;
+
+		sepChain[address]->next = nextNode;
+
+		collisionCnt++;
+
+	}
 	return *sepChain;
-	
+
 }
 
 int hashIt(int numToHash, int tblSz)
@@ -108,4 +128,3 @@ int hashIt(int numToHash, int tblSz)
 	returnVal = numToHash%tblSz;
 	return returnVal;
 }
-*/

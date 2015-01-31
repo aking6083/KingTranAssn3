@@ -23,6 +23,7 @@ int main()
 		   kAvg;
 	bool allocated = false;
 
+	chainNode** sepChain;
 
 
 	// test data
@@ -72,13 +73,12 @@ int main()
 			showResults(loadFactor, tableSize, count, avg, kAvg, doubleHash);
 
 			// Initialize separate chaining table for separate chain test
-			allocated = initSeperateChain(tableSize);
+			initSeperateChain(tableSize, allocated);
 
 			if (allocated)
 			{
 				// Load separate chaining table with random numbers
-				// ...call makeSeperateChain()
-
+				makeSeperateChain(sepChain,randomNums,tableSize);
 				// Run search and calculations
 				// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
 
