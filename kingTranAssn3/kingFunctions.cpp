@@ -156,7 +156,7 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 		//Run Separate Chain Test
 		kAvg = calcKnuth(tableSize, CHAIN, loadFactor);
 		sepChain = makeSeperateChain(sepChain, randomNums, tableSize);
-		searchChainTable(sepChain, randomNums, PROBE,tableSize, count);
+		searchChainTable(sepChain, randomNums, CHAIN, tableSize, count);
 		showResults(loadFactor, tableSize, count, avg, kAvg, CHAIN);
 		break;
 
