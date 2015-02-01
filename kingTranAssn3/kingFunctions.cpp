@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -128,7 +129,7 @@ int hashIt(int numToHash, int tblSz)
 void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int tableSize,testType theTest,
 				double &loadFactor, double &avg, double &kAvg, int &count)
 {
-	loadFactor = LIST_SIZE / tableSize;
+	//loadFactor = LIST_SIZE / tableSize;
 	avg = 0;
 	kAvg = 0;
 	
@@ -137,6 +138,7 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 	{
 	case PROBE:
 		//Run Probe Test
+		kAvg = calcKnuth(tableSize, PROBE,loadFactor);
 		makeOpenTable(randomNums, openTable, tableSize, PROBE);
 		searchOpenTable(openTable, randomNums, PROBE, count,tableSize);
 		showResults(loadFactor, tableSize, count, avg, kAvg, PROBE);
@@ -144,6 +146,7 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 
 	case DBL_HASH:
 		//Run Double Hash Test
+		kAvg = calcKnuth(tableSize, DBL_HASH, loadFactor);
 		makeOpenTable(randomNums, openTable, tableSize, DBL_HASH);
 		searchOpenTable(openTable, randomNums, DBL_HASH, count, tableSize);
 		showResults(loadFactor, tableSize, count, avg, kAvg, DBL_HASH);
@@ -151,6 +154,7 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 	
 	case CHAIN:
 		//Run Separate Chain Test
+		kAvg = calcKnuth(tableSize, CHAIN, loadFactor);
 		sepChain = makeSeperateChain(sepChain, randomNums, tableSize);
 		searchChainTable(sepChain, randomNums, PROBE,tableSize, count);
 		showResults(loadFactor, tableSize, count, avg, kAvg, CHAIN);
@@ -208,4 +212,26 @@ bool searchChainTable(chainNode *sepChain[], int randomNums[], testType theTest,
 	}
 	
 	return false;
+}
+
+double calcKnuth(int tableSize,testType theTest,double loadFactor)
+{
+	double kAvg = 0.00;
+	
+	switch (theTest)
+	{
+	case PROBE:
+		kAvg = (.5 * 1 + (1 / (1-loadFactor) ) );
+		
+		break;
+	case DBL_HASH:
+		kAvg = -log(1 - loadFactor) / loadFactor;
+ 		
+		
+		break;
+	case CHAIN:
+		kAvg = 1 + (loadFactor / 2);
+		break; 
+	}
+	return kAvg;
 }
