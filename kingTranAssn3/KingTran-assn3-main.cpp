@@ -11,12 +11,12 @@ int main()
 {
 	int *randomNums,
 		*openTable,
-		tableSize,
-		last,
-		count;
-	double loadFactor,
-		   avg,
-		   kAvg;
+		tableSize = 0,
+		last = 0,
+		count = 0;
+	double loadFactor = 0,
+		   avg = 0,
+		   kAvg = 0;
 	bool allocated = false;
 	chainNode** sepChain = NULL;
 
@@ -25,7 +25,7 @@ int main()
 
 	// Get table size
 	tableSize = getTableSize();
-
+	loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
 	// Initialize open addressing table for linear probe test
 	allocated = initOpenTable(openTable, tableSize);
 	
