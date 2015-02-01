@@ -7,23 +7,23 @@
 
 using namespace std;
 
-int *createList(int &last) // I edited the for loop a bit to ensure that it continues to generate a new number when isDupe() is true. CT
+int *createList(int &last)
 {
-	static int randomNums[LIST_SIZE] = { 0 };	// Changed hardcoded values to constants....does randomNums[] need to be static? CT
+	static int randomNums[LIST_SIZE] = { 0 };
 	int insertNum;
 
-	srand((unsigned int) time(NULL));	// added (unsigned int) to cast it as such to suppress the annoying warning when compiling. CT
+	srand((unsigned int) time(NULL));
 	last = 0;
 
 	for (int a = 0; a < LIST_SIZE; a++)
 	{
 		do
 		{
-			insertNum = rand() % MAX_RAND_RANGE + 1;	// Changed hardcoded values to constants.  Added the "+ 1" at the end so the min random number generated is 1. CT
-		} while (isDupe(randomNums, insertNum, last));	// while loop keeps it looping while number is a duplicate until it generates a unique number. CT
+			insertNum = rand() % MAX_RAND_RANGE + 1;
+		} while (isDupe(randomNums, insertNum, last));
 			
-		randomNums[a] = insertNum;	// After loop terminates, then it inserts number into array. CT
-		last = a;	// This is for the sentinel search. CT
+		randomNums[a] = insertNum;
+		last = a;
 	}
 
 	return randomNums;
@@ -139,19 +139,21 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 		//Run Probe Test
 		makeOpenTable(randomNums, openTable, tableSize, PROBE);
 		searchOpenTable(openTable, randomNums, PROBE, count,tableSize);
-		//showResults(loadFactor, tableSize, count, avg, kAvg, PROBE);
+		showResults(loadFactor, tableSize, count, avg, kAvg, PROBE);
 		break;
 
 	case DBL_HASH:
 		//Run Double Hash Test
 		makeOpenTable(randomNums, openTable, tableSize, DBL_HASH);
 		searchOpenTable(openTable, randomNums, DBL_HASH, count, tableSize);
-		//showResults(loadFactor, tableSize, count, avg, kAvg, DBL_HASH);
+		showResults(loadFactor, tableSize, count, avg, kAvg, DBL_HASH);
 		break;
 	
 	case CHAIN:
+		//Run Separate Chain Test
 		sepChain = makeSeperateChain(sepChain, randomNums, tableSize);
 		searchChainTable(sepChain, randomNums, PROBE,tableSize, count);
+		showResults(loadFactor, tableSize, count, avg, kAvg, CHAIN);
 		break;
 
 	}

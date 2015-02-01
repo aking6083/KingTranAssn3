@@ -1,5 +1,5 @@
-int * createList(int &last); //Done
-int getTableSize(); //Done
+int * createList(int &last);
+int getTableSize();
 chainNode** initSeperateChain(int tableSize, bool &allocated);
 chainNode** makeSeperateChain(chainNode *sepChain[], int randomNums[], int tableSize);
 chainNode** insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& collisionCnt);

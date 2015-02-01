@@ -314,15 +314,15 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &t
 //						   avg - average items searched
 //						   kAvg - knuth predicted items searched
 //						   theTest - test type
-//  OUTPUT:    Parameters: None
+//  OUTPUT:    Parameters: loadFactor - load factor of hash table
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(int tableSize, int count, double avg, double kAvg, testType theTest)
+void showResults(double &loadFactor, int tableSize, int count, double avg, double kAvg, testType theTest)
 {
 	int numToSearch = LIST_SIZE / 2;
-	double listSize = LIST_SIZE,
-		   loadFactor = listSize / tableSize;
+	
+	loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
 
 	switch (theTest)
 	{
