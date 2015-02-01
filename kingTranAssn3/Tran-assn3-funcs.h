@@ -17,4 +17,4 @@ int doubleHash(int theNum, int tableSize, int openTable[], int &count);	// Done
 void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &totalCount, int tableSize);	// Done
 					
 // display prototypes
-void showResults(double loadFactor, int tableSize, int numTouch, double avg, double kAvg, testType theTest);
+void showResults(int tableSize, int numTouch, double avg, double kAvg, testType theTest);

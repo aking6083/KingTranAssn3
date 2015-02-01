@@ -6,17 +6,15 @@
 //				makeOpenTable - loads random integers into open table
 //				getHash - gets the hash address for the number
 //				insertToOpen - insert a value into the open table
-//				findNextEmpty - implements linear probing test
-//				reHash - implements double hashing test
+//				linearProbe - implements linear probing test
+//				doubleHash - implements double hashing test
 //				showResults - shows the test results
 //				searchOpenTable - searches open addressing tables
 //***************************************************************************
 #include <iostream>							//For I/O
 #include <iomanip>							//For formatting output
-#include <string>							//For string variables
 #include "TranKing-assn3-common.h"			//For constant definitions
 #include "Tran-assn3-funcs.h"			    //For Tran function prototypes
-#include "kingFunctions.h"                  //For King function prototypes
 
 using namespace std;  
 
@@ -184,6 +182,7 @@ void insertToOpen(int openTable[], int hashedAddy, int theNum, int tableSize, te
 //  DESCRIP:   Implements linear probing test.
 //  INPUT:     Parameters: openTable - table to check
 //						   hashedAddy - original hash address
+//						   tableSize - size of hash table
 //  OUTPUT:    Parameters: count - counts addresses searched
 //			   Return Value: nextAddy - next hash address if collision occurs
 //  CALLS TO:  None
@@ -262,7 +261,7 @@ int doubleHash(int theNum, int tableSize, int openTable[], int &count)
 //						   randomNums - random number array
 //						   theTest - type of test to run
 //						   tableSize - size of hash table
-//  OUTPUT:    Parameters: count - counts addresses searched
+//  OUTPUT:    Parameters: totalCount - items examined per search
 //  CALLS TO:  getHash
 //			   linearProbe
 //			   doubleHash
@@ -310,8 +309,7 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &t
 //**************************************************************************
 //  FUNCTION:  showResults
 //  DESCRIP:   Displays results of each calculation for each test.
-//  INPUT:     Parameters: loadFactor - load factor used
-//						   tablSize - size of table
+//  INPUT:     Parameters: tablSize - size of table
 //						   count - numbers searched
 //						   avg - average items searched
 //						   kAvg - knuth predicted items searched
@@ -320,31 +318,33 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &t
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(double loadFactor, int tableSize, int count, double avg, double kAvg, testType theTest)
+void showResults(int tableSize, int count, double avg, double kAvg, testType theTest)
 {
 	int numToSearch = LIST_SIZE / 2;
-	
+	double listSize = LIST_SIZE,
+		   loadFactor = listSize / tableSize;
+
 	switch (theTest)
 	{
+		case NONE:
+			cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
+				 << "Load Factor = " << fixed << setprecision(3) << loadFactor;
+			cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
+			break;
 		case PROBE:
 			cout << setw(5) << " " << "Linear Probing\n"
-				 << setw(12) << count << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(10) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+				 << setw(12) << count << " items examined (avg = " << fixed << setprecision(3) << avg << " items examined per search)\n"
+				 << setw(10) << " " << "vs Knuth predicted avg = " << fixed << setprecision(3) << kAvg << " items examined per search\n\n";
 			break;
 		case DBL_HASH:
 			cout << setw(5) << " " << "Double Hashing\n"
-				 << setw(12) << count << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(10) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
+				 << setw(12) << count << " items examined (avg = " << fixed << setprecision(3) << avg << " items examined per search)\n"
+				 << setw(10) << " " << "vs Knuth predicted avg = " << fixed << setprecision(3) << kAvg << " items examined per search\n\n";
 			break;
 		case CHAIN:
 			cout << setw(5) << " " << "Chained Hashing\n"
-				 << setw(12) << count << " items examined (avg = " << avg << " items examined per search)\n"
-				 << setw(10) << " " << "vs Knuth predicted avg = " << kAvg << " items examined per search\n\n";
-			break;
-		case NONE:
-			cout << LIST_SIZE << " items loaded into a " << tableSize << " element hash table\n"
-				 << "Load Factor = " << showpoint << setprecision(3) << loadFactor;
-			cout << "\n\nResults of searching for " << numToSearch << " items:\n\n";
+				 << setw(12) << count << " items examined (avg = " << fixed << setprecision(3) << avg << " items examined per search)\n"
+				 << setw(10) << " " << "vs Knuth predicted avg = " << fixed << setprecision(3) << kAvg << " items examined per search\n\n";
 			break;
 	}
 }
