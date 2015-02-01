@@ -71,17 +71,16 @@ chainNode** initSeperateChain(int tableSize, bool &allocated)
 	}
 
 	return chainTbl;
-
 }
 
-chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
+chainNode** makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableSize)
 {
 
 	chainNode* tempNode;
 
 	int collisionCnt = 0;
 
-	for (int a = 0; a <= 5000 - 1; a++)
+	for (int a = 0; a <= LIST_SIZE- 1; a++)
 	{
 		tempNode = new (nothrow)chainNode;
 
@@ -93,12 +92,11 @@ chainNode* makeSeperateChain(chainNode* sepChain[], int randomNums[], int tableS
 		else
 			cout << "\nMemory Allocation Error\n";
 	}
-	cout << collisionCnt;
-	return *sepChain;
-
+	
+	return sepChain;
 }
 
-chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& collisionCnt)
+chainNode** insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& collisionCnt)
 {
 
 	int address = hashIt(tblData, tblSize);
@@ -116,10 +114,8 @@ chainNode* insertToChain(chainNode* sepChain[], int tblData, int tblSize, int& c
 		sepChain[address]->next = nextNode;
 
 		collisionCnt++;
-
 	}
-	return *sepChain;
-
+	return sepChain;
 }
 
 int hashIt(int numToHash, int tblSz)
@@ -127,4 +123,87 @@ int hashIt(int numToHash, int tblSz)
 	int returnVal = 0;
 	returnVal = numToHash%tblSz;
 	return returnVal;
+}
+
+void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int tableSize,testType theTest,
+				double &loadFactor, double &avg, double &kAvg, int &count)
+{
+	loadFactor = LIST_SIZE / tableSize;
+	avg = 0;
+	kAvg = 0;
+	
+	
+	switch (theTest)
+	{
+	case PROBE:
+		//Run Probe Test
+		makeOpenTable(randomNums, openTable, tableSize, PROBE);
+		searchOpenTable(openTable, randomNums, PROBE, count,tableSize);
+		//showResults(loadFactor, tableSize, count, avg, kAvg, PROBE);
+		break;
+
+	case DBL_HASH:
+		//Run Double Hash Test
+		makeOpenTable(randomNums, openTable, tableSize, DBL_HASH);
+		searchOpenTable(openTable, randomNums, DBL_HASH, count, tableSize);
+		//showResults(loadFactor, tableSize, count, avg, kAvg, DBL_HASH);
+		break;
+	
+	case CHAIN:
+		sepChain = makeSeperateChain(sepChain, randomNums, tableSize);
+		searchChainTable(sepChain, randomNums, PROBE,tableSize, count);
+		break;
+
+	}
+
+
+}
+
+bool searchChainTable(chainNode *sepChain[], int randomNums[], testType theTest, int tableSize, int &elemTouch)
+{
+	bool found = false;
+	int searchAddy = 0,
+		searchNum = 0;
+	
+
+	chainNode *topPtr = NULL;
+
+	for (int a = 0; a <= LIST_SIZE; a+= 2)
+	{
+		searchNum = randomNums[a];
+		searchAddy = getHash(searchNum, tableSize);
+		
+		if (sepChain[searchAddy] != NULL)
+		{
+			if (sepChain[searchAddy]->key == searchNum)
+			{
+				found = true;
+				elemTouch++;
+			}
+			else
+			{
+				//search the chain link
+				//topPtr = sepChain[searchAddy]; //To reset the singly linked list.
+				while (sepChain[searchAddy] != NULL)
+				{
+
+					if (sepChain[searchAddy]->key == searchNum)
+					{
+						sepChain[searchAddy] = topPtr;
+						found = true;
+						elemTouch++;
+
+					}
+					else
+					{
+						sepChain[searchAddy] = sepChain[searchAddy]->next;
+						elemTouch++;
+					}
+
+				}
+			}
+		}
+	}
+	
+	return false;
 }

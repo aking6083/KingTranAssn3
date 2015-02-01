@@ -18,20 +18,22 @@ int main()
 		tableSize,
 		last,
 		count;
+
 	double loadFactor,
 		   avg,
 		   kAvg;
+		   
 	bool allocated = false;
 
 	chainNode** sepChain = NULL;
 
 
-	// test data
-	avg = 1.5;
-	kAvg = 2.5;
-	loadFactor = 0.5;
+	// for inital run
+	avg = 0;
+	kAvg = 0;
+	//loadFactor = 0.0;
 	count = 0;
-	// end of test data
+	// end of test data*/
 
 
 
@@ -43,17 +45,16 @@ int main()
 
 	// Initialize open addressing table for linear probe test
 	allocated = initOpenTable(openTable, tableSize);
-
-	if (allocated)
+	
+	if (allocated) //Linear Probe
 	{
 		// Show information applicable to all tests
+		loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
 		showResults(loadFactor, tableSize, count, avg, kAvg, none);
 
-		// Load open addressing table with random numbers
-		makeOpenTable(randomNums, openTable, tableSize, probe);
-
-		// Run search and calculations
-		// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+		// Run Linear probe test on open table.
+		
+		runTest(openTable, sepChain, randomNums, tableSize, PROBE, loadFactor, avg, kAvg,count);
 
 		// Shows results of search and calculations
 		showResults(loadFactor, tableSize, count, avg, kAvg, probe);
@@ -61,8 +62,9 @@ int main()
 		// Initialize open addressing table for double hash test
 		allocated = initOpenTable(openTable, tableSize);
 
-		if (allocated)
+		if (allocated) //Double Hash
 		{
+			//runTest(openTable, sepChain, randomNums, tableSize, DBL_HASH, loadFactor, avg, kAvg, count);
 			// Load open addressing table with random numbers
 			//makeOpenTable(randomNums, openTable, tableSize, doubleHash);
 
@@ -73,12 +75,15 @@ int main()
 			//showResults(loadFactor, tableSize, count, avg, kAvg, doubleHash);
 
 			// Initialize separate chaining table for separate chain test
-			initSeperateChain(tableSize, allocated);
+			sepChain = initSeperateChain(tableSize, allocated);
 
 			if (allocated)
 			{
+				
+				
 				// Load separate chaining table with random numbers
-				makeSeperateChain(sepChain,randomNums,tableSize);
+				count = 0;
+				runTest(openTable, sepChain, randomNums, tableSize, CHAIN, loadFactor, avg, kAvg, count);
 				// Run search and calculations
 				// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
 

@@ -85,7 +85,7 @@ bool initOpenTable(int* &openTable, int tableSize)
 	 else
 	 {
 		 // initialize all elements in array to 0
-		 for (int i = 0; i < (tableSize); i++)
+		 for (int i = 0; i < (tableSize)-1; i++)
 			 openTable[i] = 0;
 		 
 		 return true;
@@ -238,9 +238,13 @@ int doubleHash(int oldAddy, int theNum, int tableSize, int openTable[], int &cou
 	newAddy = oldAddy + primHash;
 
 	// loops while double-hashed address is not empty
+	
 	while (openTable[newAddy] != 0)
 	{
+		
+		
 		newAddy += primHash;
+		insertToOpen(openTable, newAddy, theNum, tableSize, DBL_HASH);
 		count++;
 	}
 		
@@ -309,7 +313,7 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &c
 void showResults(double loadFactor, int tableSize, int count, double avg, double kAvg, testType theTest)	// having trouble with this function...CT
 {
 	int numToSearch = LIST_SIZE / 2;
-	
+		
 	switch (theTest)
 	{
 		case PROBE:
