@@ -80,12 +80,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="King-assn3-funcs.h" />
+    <ClInclude Include="King-assn3-funcs.h.bak" />
     <ClInclude Include="Tran-assn3-funcs.h" />
     <ClInclude Include="TranKing-assn3-common.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="King-assn3-funcs.cpp" />
+    <ClCompile Include="King-assn3-funcs.cpp.bak" />
     <ClCompile Include="KingTran-assn3-main.cpp" />
     <ClCompile Include="Tran-assn3-funcs.cpp" />
   </ItemGroup>

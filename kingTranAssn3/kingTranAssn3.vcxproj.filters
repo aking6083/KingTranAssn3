@@ -21,7 +21,7 @@
     <ClInclude Include="TranKing-assn3-common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="King-assn3-funcs.h">
+    <ClInclude Include="King-assn3-funcs.h.bak">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="KingTran-assn3-main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="King-assn3-funcs.cpp">
+    <ClCompile Include="King-assn3-funcs.cpp.bak">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
