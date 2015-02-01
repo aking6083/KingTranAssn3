@@ -47,16 +47,17 @@ int main()
 	if (allocated)
 	{
 		// Show information applicable to all tests
-		showResults(loadFactor, tableSize, count, avg, kAvg, none);
+		showResults(tableSize, count, avg, kAvg, none);
 
 		// Load open addressing table with random numbers
 		makeOpenTable(randomNums, openTable, tableSize, probe);
 
 		// Run search and calculations
 		// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+		searchOpenTable(openTable, randomNums, probe, count, tableSize);
 
 		// Shows results of search and calculations
-		showResults(loadFactor, tableSize, count, avg, kAvg, probe);
+		showResults(tableSize, count, avg, kAvg, probe);
 
 		// Initialize open addressing table for double hash test
 		allocated = initOpenTable(openTable, tableSize);
@@ -64,15 +65,16 @@ int main()
 		if (allocated)
 		{
 			// Load open addressing table with random numbers
-			//makeOpenTable(randomNums, openTable, tableSize, doubleHash);
+			makeOpenTable(randomNums, openTable, tableSize, doubleHash);
 
 			// Run search and calculations
 			// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
+			searchOpenTable(openTable, randomNums, doubleHash, count, tableSize);
 
 			// Shows results of search and calculations
-			//showResults(loadFactor, tableSize, count, avg, kAvg, doubleHash);
+			showResults(tableSize, count, avg, kAvg, doubleHash);
 
-			// Initialize separate chaining table for separate chain test
+/*			// Initialize separate chaining table for separate chain test
 			initSeperateChain(tableSize, allocated);
 
 			if (allocated)
@@ -83,8 +85,8 @@ int main()
 				// ...call runTest() function here -> runTest() calls calcKnuth & search..() functions.  Should it also call showResults()? CT
 
 				// Shows results of search and calculations
-				showResults(loadFactor, tableSize, count, avg, kAvg, chain);
-			}
+				showResults(tableSize, count, avg, kAvg, chain);
+			}*/
 		}
 	}
 
