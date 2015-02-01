@@ -309,7 +309,7 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &t
 //**************************************************************************
 //  FUNCTION:  showResults
 //  DESCRIP:   Displays results of each calculation for each test.
-//  INPUT:     Parameters: tablSize - size of table
+//  INPUT:     Parameters: tableSize - size of table
 //						   count - numbers searched
 //						   avg - average items searched
 //						   kAvg - knuth predicted items searched
