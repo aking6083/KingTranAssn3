@@ -1,5 +1,15 @@
+/*****************************************************************************
+// CODE FILENAME: KingTran-assn3-main.cpp
+// DESCRIPTION: 
+// CLASS/TERM: CS372 Spring 8 Week 1
+// DESIGNER: Adam King & Christopher Tran
+// FUNCTIONS:main()
+//
+// 
+//****************************************************************************/
+
 #include "TranKing-assn3-common.h"
-#include "kingFunctions.h"
+#include "King-assn3-funcs.h"
 #include "Tran-assn3-funcs.h"
 #include <iostream>
 #include <iomanip>
@@ -7,6 +17,16 @@
 
 using namespace std;
 
+/******************************************************************************
+//  FUNCTION:  main
+//  DESCRIP:   Driver function for doing test and displaying results.
+//  OUTPUT:
+//  Parameters:
+//  Return Val: 0 on successfull exit
+//  CALLS TO: createList,getTableSize,initOpenTable,showResults,runTest,
+//			  initSeperateChain
+//  IMPLEMENTED BY:  Adam King & Chris Tran
+******************************************************************************/
 int main()
 {
 	int *randomNums,
@@ -51,7 +71,7 @@ int main()
 
 			if (allocated)	//Separate Chain
 			{
-				// Load separate chaining table with random numbers
+				// run separate chaining test on sepChain
 				count = 0;
 				runTest(openTable, sepChain, randomNums, tableSize, CHAIN, loadFactor, avg, kAvg, count, numToSearch);
 			}
