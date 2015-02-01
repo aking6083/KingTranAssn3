@@ -223,7 +223,7 @@ void calcKnuth(int tableSize, testType theTest, double loadFactor, double &avg, 
 	{
 	case PROBE:
 		avg = static_cast<double>(count) / static_cast<double>(numToSearch);
-		kAvg = (.5 * 1 + (1 / (1-loadFactor) ) );
+		kAvg = 0.5 * (1 + (1 / (1-loadFactor) ) );
 		break;
 	case DBL_HASH:
 		avg = static_cast<double>(count) / static_cast<double>(numToSearch);
