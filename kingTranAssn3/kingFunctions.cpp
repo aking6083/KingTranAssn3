@@ -126,8 +126,8 @@ int hashIt(int numToHash, int tblSz)
 	return returnVal;
 }
 
-void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int tableSize,testType theTest,
-				double &loadFactor, double &avg, double &kAvg, int &count)
+void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int tableSize, testType theTest,
+				double &loadFactor, double &avg, double &kAvg, int &count, int numToSearch)
 {
 	//loadFactor = LIST_SIZE / tableSize;
 	avg = 0;
@@ -138,26 +138,26 @@ void runTest(int openTable[], chainNode* sepChain[], int randomNums[], int table
 	{
 	case PROBE:
 		//Run Probe Test
-		kAvg = calcKnuth(tableSize, PROBE,loadFactor);
 		makeOpenTable(randomNums, openTable, tableSize, PROBE);
-		searchOpenTable(openTable, randomNums, PROBE, count,tableSize);
-		showResults(loadFactor, tableSize, count, avg, kAvg, PROBE);
+		searchOpenTable(openTable, randomNums, PROBE, count, tableSize);
+		calcKnuth(tableSize, PROBE, loadFactor, avg, kAvg, numToSearch, count);
+		showResults(loadFactor, tableSize, count, avg, kAvg, numToSearch, PROBE);
 		break;
 
 	case DBL_HASH:
 		//Run Double Hash Test
-		kAvg = calcKnuth(tableSize, DBL_HASH, loadFactor);
 		makeOpenTable(randomNums, openTable, tableSize, DBL_HASH);
 		searchOpenTable(openTable, randomNums, DBL_HASH, count, tableSize);
-		showResults(loadFactor, tableSize, count, avg, kAvg, DBL_HASH);
+		calcKnuth(tableSize, DBL_HASH, loadFactor, avg, kAvg, numToSearch, count);
+		showResults(loadFactor, tableSize, count, avg, kAvg, numToSearch, DBL_HASH);
 		break;
 	
 	case CHAIN:
 		//Run Separate Chain Test
-		kAvg = calcKnuth(tableSize, CHAIN, loadFactor);
 		sepChain = makeSeperateChain(sepChain, randomNums, tableSize);
 		searchChainTable(sepChain, randomNums, CHAIN, tableSize, count);
-		showResults(loadFactor, tableSize, count, avg, kAvg, CHAIN);
+		calcKnuth(tableSize, CHAIN, loadFactor, avg, kAvg, numToSearch, count);
+		showResults(loadFactor, tableSize, count, avg, kAvg, numToSearch, CHAIN);
 		break;
 
 	}
@@ -214,24 +214,24 @@ bool searchChainTable(chainNode *sepChain[], int randomNums[], testType theTest,
 	return false;
 }
 
-double calcKnuth(int tableSize,testType theTest,double loadFactor)
+void calcKnuth(int tableSize, testType theTest, double loadFactor, double &avg, double &kAvg, int numToSearch, int count)
 {
-	double kAvg = 0.00;
+	avg = 0.00;
+	kAvg = 0.00;
 	
 	switch (theTest)
 	{
 	case PROBE:
+		avg = static_cast<double>(count) / static_cast<double>(numToSearch);
 		kAvg = (.5 * 1 + (1 / (1-loadFactor) ) );
-		
 		break;
 	case DBL_HASH:
+		avg = static_cast<double>(count) / static_cast<double>(numToSearch);
 		kAvg = -log(1 - loadFactor) / loadFactor;
- 		
-		
-		break;
+ 		break;
 	case CHAIN:
+		avg = static_cast<double>(count) / static_cast<double>(numToSearch);
 		kAvg = 1 + (loadFactor / 2);
 		break; 
 	}
-	return kAvg;
 }

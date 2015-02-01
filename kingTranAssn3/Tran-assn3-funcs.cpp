@@ -318,11 +318,11 @@ void searchOpenTable(int openTable[], int randomNums[], testType theTest, int &t
 //  CALLS TO:  None
 //  IMPLEMENTED BY:  Chris Tran
 //**************************************************************************
-void showResults(double &loadFactor, int tableSize, int count, double avg, double kAvg, testType theTest)
+void showResults(double &loadFactor, int tableSize, int count, double avg, double kAvg, int &numToSearch, testType theTest)
 {
-	int numToSearch = LIST_SIZE / 2;
+	numToSearch = LIST_SIZE / 2;
 	
-	//loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
+	loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
 
 	switch (theTest)
 	{

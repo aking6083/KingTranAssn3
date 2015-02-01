@@ -13,7 +13,8 @@ int main()
 		*openTable,
 		tableSize = 0,
 		last = 0,
-		count = 0;
+		count = 0,
+		numToSearch = 0;
 	double loadFactor = 0,
 		   avg = 0,
 		   kAvg = 0;
@@ -25,17 +26,17 @@ int main()
 
 	// Get table size
 	tableSize = getTableSize();
-	loadFactor = static_cast<double>(LIST_SIZE) / static_cast<double>(tableSize);
+
 	// Initialize open addressing table for linear probe test
 	allocated = initOpenTable(openTable, tableSize);
 	
 	if (allocated) //Linear Probe
 	{
 		// Show information applicable to all tests
-		showResults(loadFactor, tableSize, count, avg, kAvg, NONE);
+		showResults(loadFactor, tableSize, count, avg, kAvg, numToSearch, NONE);
 
 		// Run Linear probe test on open table.
-		runTest(openTable, sepChain, randomNums, tableSize, PROBE, loadFactor, avg, kAvg, count);
+		runTest(openTable, sepChain, randomNums, tableSize, PROBE, loadFactor, avg, kAvg, count, numToSearch);
 
 		// Initialize open addressing table for double hash test
 		allocated = initOpenTable(openTable, tableSize);
@@ -43,7 +44,7 @@ int main()
 		if (allocated) //Double Hash
 		{
 			// Run Linear probe test on open table.
-			runTest(openTable, sepChain, randomNums, tableSize, DBL_HASH, loadFactor, avg, kAvg, count);
+			runTest(openTable, sepChain, randomNums, tableSize, DBL_HASH, loadFactor, avg, kAvg, count, numToSearch);
 
 			// Initialize separate chaining table for separate chain test
 			sepChain = initSeperateChain(tableSize, allocated);
@@ -52,7 +53,7 @@ int main()
 			{
 				// Load separate chaining table with random numbers
 				count = 0;
-				runTest(openTable, sepChain, randomNums, tableSize, CHAIN, loadFactor, avg, kAvg, count);
+				runTest(openTable, sepChain, randomNums, tableSize, CHAIN, loadFactor, avg, kAvg, count, numToSearch);
 			}
 		}
 	}
